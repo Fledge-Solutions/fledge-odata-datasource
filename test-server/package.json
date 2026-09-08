@@ -1,0 +1,54 @@
+{
+  "name": "grafana-odata-datasource-test-server",
+  "version": "1.0.0",
+  "description": "A simple test server for the Grafana OData Data Source Plugin",
+  "scripts": {
+    "start": "ts-node generateTestdata.ts && cds-ts deploy && cds-ts serve"
+  },
+  "author": "d.velop AG",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@cap-js/sqlite": "^2.2.0",
+    "@eslint/js": "^10.0.1",
+    "@sap/cds": "^9.8.5",
+    "@types/express": "^5.0.6",
+    "@types/express-session": "^1.18.2",
+    "@types/uuid": "^11.0.0",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "jose": "^6.2.2",
+    "morgan": "^1.10.1",
+    "openid-client": "^6.8.2",
+    "prettier": "^3.8.2",
+    "typescript": "5.9.3",
+    "uuid": "^13.0.0",
+    "xmlbuilder2": "^4.0.3"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "@sap/cds-dk": "^9.8.3"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@10.30.3",
+  "pnpm": {
+    "onlyBuiltDependencies": ["better-sqlite3"]
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite",
+        "credentials": {
+          "url": "db.sqlite"
+        }
+      }
+    },
+    "log": {
+      "service": true
+    },
+    "features": {
+      "odata_new_parser": true
+    }
+  }
+}

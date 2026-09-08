@@ -1,0 +1,61 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "datasource",
+  "name": "Fledge OData",
+  "id": "fledge-odata-datasource",
+  "metrics": true,
+  "backend": true,
+  "annotations": true,
+  "logs": true,
+  "alerting": true,
+  "streaming": false,
+  "tracing": false,
+  "executable": "gpx_odata-datasource",
+  "info": {
+    "description": "OData V4 data source for Grafana with Fledge-specific OAuth2 support",
+    "author": {
+      "name": "Fledge",
+      "url": "https://www.fledge.nl"
+    },
+    "keywords": [
+      "odata",
+      "fledge",
+      "rest",
+      "json",
+      "datasource",
+      "oauth2"
+    ],
+    "logos": {
+      "small": "img/ODataLogo.svg",
+      "large": "img/ODataLogo.svg"
+    },
+    "links": [
+      {
+        "name": "Website",
+        "url": "https://www.fledge.nl"
+      },
+      {
+        "name": "GitHub",
+        "url": "https://github.com/fledge-solutions/fledge-odata-datasource"
+      },
+      {
+        "name": "License",
+        "url": "https://github.com/fledge-solutions/fledge-odata-datasource/blob/master/LICENSE"
+      },
+      {
+        "name": "Learn more on OData",
+        "url": "https://www.odata.org/"
+      }
+    ],
+    "screenshots": [
+      { "name": "Add Data Source", "path": "img/AddDataSource.png" },
+      { "name": "Create Query", "path": "img/CreateQuery.png" }
+    ],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=10.4.0",
+    "plugins": []
+  }
+}
