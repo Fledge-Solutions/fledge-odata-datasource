@@ -607,10 +607,7 @@ func (ds *ODataSource) collectPaginatedValues(ctx context.Context, clientInstanc
 
 	nextLink := result.NextLink
 	pageCount := 1
-	truncated := false
-	if len(allValues) >= maxPaginatedRows {
-		truncated = true
-	}
+	truncated := len(allValues) >= maxPaginatedRows
 	for nextLink != "" && !truncated {
 		pageCount++
 		log.DefaultLogger.Debug("fetching next page", "pageNumber", pageCount, "nextLink", nextLink)

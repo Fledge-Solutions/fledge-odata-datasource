@@ -1,0 +1,15 @@
+version: "2"
+
+run:
+  # Only lint this module's own Go packages - without this, `golangci-lint
+  # run ./...` also picks up stray Go files vendored inside frontend
+  # dependencies (e.g. node_modules/flatted ships one), which aren't ours
+  # to fix and shouldn't fail CI.
+  modules-download-mode: readonly
+
+linters:
+  exclusions:
+    paths:
+      - node_modules
+      - dist
+      - test-server
