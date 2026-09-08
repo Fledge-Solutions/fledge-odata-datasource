@@ -180,6 +180,6 @@ For questions or issues with the plugin:
 
 ## Version Information
 
-- **Plugin Version**: 1.3.0
+- **Plugin Version**: 1.4.0
 - **Grafana Compatibility**: ≥10.4.0
 - **OData Version**: V4

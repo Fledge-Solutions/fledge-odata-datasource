@@ -1,6 +1,6 @@
 # Change Log
 
-## [Unreleased]
+## [1.4.0] 2026-09-08
 
 ### Features
 - `$apply`-based aggregation (grouped and ungrouped) for entity sets that support it

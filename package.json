@@ -1,6 +1,6 @@
 {
   "name": "fledge-odata-datasource",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Fledge data source for Grafana: query Fledge and other OData V4 services, with Fledge OAuth2 support",
   "bugs": {
     "url": "https://github.com/fledge-solutions/fledge-odata-datasource/issues"
