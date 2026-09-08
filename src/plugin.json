@@ -54,6 +54,13 @@
     "version": "%VERSION%",
     "updated": "%TODAY%"
   },
+  "includes": [
+    {
+      "type": "dashboard",
+      "name": "Business Overview",
+      "path": "dashboards/business-overview.json"
+    }
+  ],
   "dependencies": {
     "grafanaDependency": ">=13.2.1",
     "plugins": []

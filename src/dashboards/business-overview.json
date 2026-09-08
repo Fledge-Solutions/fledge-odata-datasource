@@ -1,0 +1,3428 @@
+{
+  "id": null,
+  "uid": "fledge-odata-business-overview",
+  "title": "Fledge OData \u2013 Business Overview",
+  "description": "Generic, cross-customer example dashboard for the Fledge OData datasource: Sales Orders, Production Orders, Purchasing and Relations.",
+  "tags": [
+    "fledge",
+    "odata",
+    "example"
+  ],
+  "editable": true,
+  "graphTooltip": 1,
+  "fiscalYearStartMonth": 0,
+  "liveNow": false,
+  "schemaVersion": 39,
+  "version": 4,
+  "timezone": "browser",
+  "refresh": "",
+  "time": {
+    "from": "now-90d",
+    "to": "now+60d"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "6h",
+      "12h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d",
+      "90d"
+    ]
+  },
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "links": [],
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "type": "datasource",
+        "label": "Data source",
+        "query": "fledge-odata-datasource",
+        "current": {},
+        "options": [],
+        "regex": "",
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "refresh": 1,
+        "skipUrlSync": false
+      },
+      {
+        "name": "administration",
+        "type": "query",
+        "label": "Administration",
+        "description": "Scopes every panel below except the Relations row (Relations are not administration-scoped in the OData model). Leave on \"All\" to see every administration at once.",
+        "datasource": {
+          "type": "fledge-odata-datasource",
+          "uid": "${datasource}"
+        },
+        "query": "{\"entitySet\": \"Administrations\", \"entityType\": \"FledgeDev.Models.Entities.Administration\", \"valueField\": \"administration_id\", \"textField\": \"name\"}",
+        "definition": "{\"entitySet\": \"Administrations\", \"entityType\": \"FledgeDev.Models.Entities.Administration\", \"valueField\": \"administration_id\", \"textField\": \"name\"}",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "options": [],
+        "regex": "",
+        "includeAll": true,
+        "allValue": "__all__",
+        "multi": false,
+        "sort": 1,
+        "refresh": 1,
+        "hide": 0,
+        "skipUrlSync": false
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "text",
+      "title": "Fledge OData \u2013 Business Overview",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 4
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "### Fledge OData for Grafana \u2013 Business Overview\n\nA generic, cross-customer starting point built on the **Fledge OData v2** datasource. It covers **Sales Orders**, **Production Orders**, **Purchasing** and **Relations (CRM)**, and is meant as a bundled example \u2014 duplicate it and adapt it to your own reporting needs.\n\n- **Administration** (top left) scopes every panel except the Relations row (Relations are not administration-scoped in the OData model). Leave it on *All* to see every administration at once.\n- The dashboard's time range filters every panel on that section's date field (order date, or first-contact date for Relations) \u2014 it defaults to the last 90 days through the next 60 days to show recent activity together with near-term planning.\n- Panels mix **server-side aggregation** (OData `$apply`/groupby, e.g. the value-over-time charts) with **client-side transformations** (Grafana's own group-by/reduce, e.g. the Relations breakdowns) \u2014 both are fully supported by this datasource.\n"
+      },
+      "transparent": false
+    },
+    {
+      "id": 2,
+      "type": "row",
+      "title": "Sales Orders",
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 24,
+        "h": 1
+      },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Open Sales Orders",
+      "description": "Sales order headers not yet locked, with an order date in the current time range.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 5,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "count"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "SalesOrderHeaders",
+            "entityType": "FledgeDev.Models.Entities.SalesOrderHeader"
+          },
+          "refId": "A",
+          "properties": [
+            {
+              "name": "sales_order_header_id",
+              "type": "Edm.String"
+            }
+          ],
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "has_sales_order_locked",
+                "type": "Edm.Boolean"
+              },
+              "operator": "eq",
+              "value": "false"
+            },
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Sales Order Bookings (Period)",
+      "description": "Sum of sales order line value (price_local_currency_gross) booked with an order date in the current time range.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 5,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyEUR"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "SalesOrderLines",
+            "entityType": "FledgeDev.Models.Entities.SalesOrderLine"
+          },
+          "refId": "A",
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ],
+          "groupBy": [],
+          "aggregates": [
+            {
+              "property": {
+                "name": "price_local_currency_gross",
+                "type": "Edm.Decimal"
+              },
+              "function": "sum",
+              "alias": "booked_value"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Sales Order Lines (Period)",
+      "description": "Count of sales order lines with an order date in the current time range.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 5,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "count"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "SalesOrderLines",
+            "entityType": "FledgeDev.Models.Entities.SalesOrderLine"
+          },
+          "refId": "A",
+          "properties": [
+            {
+              "name": "sales_order_header_id",
+              "type": "Edm.String"
+            }
+          ],
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "Customers Ordering (Period)",
+      "description": "Distinct debtors that placed a sales order with an order date in the current time range.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 18,
+        "y": 5,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "distinctCount"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "SalesOrderHeaders",
+            "entityType": "FledgeDev.Models.Entities.SalesOrderHeader"
+          },
+          "refId": "A",
+          "properties": [
+            {
+              "name": "debtor_id",
+              "type": "Edm.Int32"
+            }
+          ],
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "Sales Order Bookings Over Time",
+      "description": "Sales order line value summed per order date, computed server-side via OData $apply groupby/aggregate.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 9,
+        "w": 24,
+        "h": 9
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "gradientMode": "opacity",
+            "pointSize": 5,
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "mode": "none",
+              "group": "A"
+            },
+            "axisPlacement": "auto",
+            "axisLabel": "",
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "unit": "currencyEUR",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "SalesOrderLines",
+            "entityType": "FledgeDev.Models.Entities.SalesOrderLine"
+          },
+          "refId": "BookedValue",
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ],
+          "groupBy": [
+            {
+              "name": "order_date",
+              "type": "Edm.Date"
+            }
+          ],
+          "aggregates": [
+            {
+              "property": {
+                "name": "price_local_currency_gross",
+                "type": "Edm.Decimal"
+              },
+              "function": "sum",
+              "alias": "booked_value"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "barchart",
+      "title": "Sales Order Value by Type",
+      "description": "Sales order line value grouped by the Fledge sales order type code (server-side $apply), scoped to the current time range.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 18,
+        "w": 12,
+        "h": 9
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "lineWidth": 1,
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "axisPlacement": "auto"
+          },
+          "mappings": [],
+          "unit": "currencyEUR"
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "auto",
+        "xTickLabelRotation": 0,
+        "showValue": "auto",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "SalesOrderLines",
+            "entityType": "FledgeDev.Models.Entities.SalesOrderLine"
+          },
+          "refId": "ValueByType",
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ],
+          "groupBy": [
+            {
+              "name": "sales_order_type",
+              "type": "Edm.Int32"
+            }
+          ],
+          "aggregates": [
+            {
+              "property": {
+                "name": "price_local_currency_gross",
+                "type": "Edm.Decimal"
+              },
+              "function": "sum",
+              "alias": "total_value"
+            }
+          ]
+        }
+      ],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "targetField": "sales_order_type",
+                "destinationType": "string"
+              }
+            ]
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "indexByName": {
+              "sales_order_type": 0,
+              "total_value": 1
+            },
+            "renameByName": {
+              "sales_order_type": "Order Type",
+              "total_value": "Value"
+            },
+            "excludeByName": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "table",
+      "title": "Recent Sales Orders",
+      "description": "Sales order headers with an order date in the current time range, newest first.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 18,
+        "w": 12,
+        "h": 9
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Order Date"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Planning Date"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          }
+        ]
+      },
+      "pluginVersion": "13.2.1",
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "reducer": [
+            "sum"
+          ],
+          "countRows": false,
+          "fields": ""
+        },
+        "sortBy": [
+          {
+            "displayName": "Order Date",
+            "desc": true
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "SalesOrderHeaders",
+            "entityType": "FledgeDev.Models.Entities.SalesOrderHeader"
+          },
+          "refId": "Orders",
+          "properties": [
+            {
+              "name": "sales_order_header_id",
+              "type": "Edm.String"
+            },
+            {
+              "name": "description",
+              "type": "Edm.String"
+            },
+            {
+              "name": "our_reference",
+              "type": "Edm.String"
+            },
+            {
+              "name": "sales_order_type_id",
+              "type": "Edm.Int32"
+            },
+            {
+              "name": "has_sales_order_locked",
+              "type": "Edm.Boolean"
+            },
+            {
+              "name": "planning_date",
+              "type": "Edm.Date"
+            }
+          ],
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "expands": [
+            {
+              "expand": {
+                "name": "Debtor",
+                "type": "FledgeDev.Models.Entities.Debtor"
+              },
+              "properties": [
+                {
+                  "name": "company_name",
+                  "type": "Edm.String"
+                }
+              ]
+            }
+          ],
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ]
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "indexByName": {
+              "sales_order_header_id": 0,
+              "order_date": 1,
+              "Debtor.company_name": 2,
+              "description": 3,
+              "our_reference": 4,
+              "sales_order_type_id": 5,
+              "has_sales_order_locked": 6,
+              "planning_date": 7
+            },
+            "renameByName": {
+              "sales_order_header_id": "Order",
+              "order_date": "Order Date",
+              "Debtor.company_name": "Customer",
+              "description": "Description",
+              "our_reference": "Our Reference",
+              "sales_order_type_id": "Type",
+              "has_sales_order_locked": "Locked",
+              "planning_date": "Planning Date"
+            },
+            "excludeByName": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "type": "row",
+      "title": "Production Orders",
+      "gridPos": {
+        "x": 0,
+        "y": 27,
+        "w": 24,
+        "h": 1
+      },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 11,
+      "type": "stat",
+      "title": "Production Orders (Period)",
+      "description": "Production order headers with an order date in the current time range.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 28,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "count"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "ProductionOrderHeaders",
+            "entityType": "FledgeDev.Models.Entities.ProductionOrderHeader"
+          },
+          "refId": "A",
+          "properties": [
+            {
+              "name": "production_order_header_id",
+              "type": "Edm.String"
+            }
+          ],
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "stat",
+      "title": "Flagged for Planning",
+      "description": "Production orders flagged to be planned, with an order date in the current time range.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 28,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "count"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "ProductionOrderHeaders",
+            "entityType": "FledgeDev.Models.Entities.ProductionOrderHeader"
+          },
+          "refId": "A",
+          "properties": [
+            {
+              "name": "production_order_header_id",
+              "type": "Edm.String"
+            }
+          ],
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "planning",
+                "type": "Edm.Boolean"
+              },
+              "operator": "eq",
+              "value": "true"
+            },
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "type": "stat",
+      "title": "Pre-calculated Cost (Period)",
+      "description": "Sum of pre-calculated total cost (cost_total_pre_calculation) for production orders with an order date in the current time range.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 28,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyEUR"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "ProductionOrderHeaders",
+            "entityType": "FledgeDev.Models.Entities.ProductionOrderHeader"
+          },
+          "refId": "A",
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ],
+          "groupBy": [],
+          "aggregates": [
+            {
+              "property": {
+                "name": "cost_total_pre_calculation",
+                "type": "Edm.Decimal"
+              },
+              "function": "sum",
+              "alias": "total_cost"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "type": "stat",
+      "title": "Pre-calculated Hours (Period)",
+      "description": "Sum of pre-calculated total hours (total_hours_pre_calculation) for production orders with an order date in the current time range.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 18,
+        "y": 28,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "h"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "ProductionOrderHeaders",
+            "entityType": "FledgeDev.Models.Entities.ProductionOrderHeader"
+          },
+          "refId": "A",
+          "properties": [
+            {
+              "name": "total_hours_pre_calculation",
+              "type": "Edm.Int32"
+            }
+          ],
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "type": "timeseries",
+      "title": "Pre-calculated Cost Over Time",
+      "description": "Production order pre-calculated total cost summed per order date (server-side $apply).",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 32,
+        "w": 12,
+        "h": 9
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "gradientMode": "opacity",
+            "pointSize": 5,
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "mode": "none",
+              "group": "A"
+            },
+            "axisPlacement": "auto",
+            "axisLabel": "",
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "unit": "currencyEUR",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "ProductionOrderHeaders",
+            "entityType": "FledgeDev.Models.Entities.ProductionOrderHeader"
+          },
+          "refId": "Cost",
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ],
+          "groupBy": [
+            {
+              "name": "order_date",
+              "type": "Edm.Date"
+            }
+          ],
+          "aggregates": [
+            {
+              "property": {
+                "name": "cost_total_pre_calculation",
+                "type": "Edm.Decimal"
+              },
+              "function": "sum",
+              "alias": "total_cost"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "type": "timeseries",
+      "title": "Pre-calculated Hours Over Time",
+      "description": "Production order pre-calculated total hours summed per order date (client-side aggregation - see panel description above for why).",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 32,
+        "w": 12,
+        "h": 9
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "bars",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 80,
+            "gradientMode": "opacity",
+            "pointSize": 5,
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "mode": "none",
+              "group": "A"
+            },
+            "axisPlacement": "auto",
+            "axisLabel": "",
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "unit": "h",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "ProductionOrderHeaders",
+            "entityType": "FledgeDev.Models.Entities.ProductionOrderHeader"
+          },
+          "refId": "Hours",
+          "properties": [
+            {
+              "name": "total_hours_pre_calculation",
+              "type": "Edm.Int32"
+            }
+          ],
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ]
+        }
+      ],
+      "transformations": [
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "order_date": {
+                "operation": "groupby"
+              },
+              "total_hours_pre_calculation": {
+                "operation": "aggregate",
+                "aggregations": [
+                  "sum"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "indexByName": {},
+            "renameByName": {
+              "order_date": "Order Date",
+              "total_hours_pre_calculation (sum)": "Pre-calculated Hours"
+            },
+            "excludeByName": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "type": "bargauge",
+      "title": "Top 10 Production Orders by Pre-calculated Cost",
+      "description": "Highest pre-calculated total cost per production order, for orders with an order date in the current time range (server-side $apply, top 10 client-side).",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 41,
+        "w": 12,
+        "h": 9
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyEUR",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "gradient",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "ProductionOrderHeaders",
+            "entityType": "FledgeDev.Models.Entities.ProductionOrderHeader"
+          },
+          "refId": "TopCost",
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ],
+          "groupBy": [
+            {
+              "name": "production_order_header_id",
+              "type": "Edm.String"
+            }
+          ],
+          "aggregates": [
+            {
+              "property": {
+                "name": "cost_total_pre_calculation",
+                "type": "Edm.Decimal"
+              },
+              "function": "sum",
+              "alias": "total_cost"
+            }
+          ]
+        }
+      ],
+      "transformations": [
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "field": "total_cost",
+                "desc": true
+              }
+            ]
+          }
+        },
+        {
+          "id": "limit",
+          "options": {
+            "limitField": 10
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "indexByName": {},
+            "renameByName": {
+              "production_order_header_id": "Order",
+              "total_cost": "Pre-calculated Cost"
+            },
+            "excludeByName": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "type": "table",
+      "title": "Recent Production Orders",
+      "description": "Production order headers with an order date in the current time range, newest first.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 41,
+        "w": 12,
+        "h": 9
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Order Date"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Planning Date"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Cost (VC)"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyEUR"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Hours (VC)"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "h"
+              }
+            ]
+          }
+        ]
+      },
+      "pluginVersion": "13.2.1",
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "reducer": [
+            "sum"
+          ],
+          "countRows": false,
+          "fields": ""
+        },
+        "sortBy": [
+          {
+            "displayName": "Order Date",
+            "desc": true
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "ProductionOrderHeaders",
+            "entityType": "FledgeDev.Models.Entities.ProductionOrderHeader"
+          },
+          "refId": "Orders",
+          "properties": [
+            {
+              "name": "description_1",
+              "type": "Edm.String"
+            },
+            {
+              "name": "article_id",
+              "type": "Edm.String"
+            },
+            {
+              "name": "production_order_status_id",
+              "type": "Edm.Int32"
+            },
+            {
+              "name": "planning_date",
+              "type": "Edm.Date"
+            },
+            {
+              "name": "total_hours_pre_calculation",
+              "type": "Edm.Int32"
+            },
+            {
+              "name": "cost_total_pre_calculation",
+              "type": "Edm.Decimal"
+            }
+          ],
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ]
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "indexByName": {
+              "production_order_header_id": 0,
+              "order_date": 1,
+              "description_1": 2,
+              "article_id": 3,
+              "production_order_status_id": 4,
+              "planning_date": 5,
+              "total_hours_pre_calculation": 6,
+              "cost_total_pre_calculation": 7
+            },
+            "renameByName": {
+              "production_order_header_id": "Order",
+              "order_date": "Order Date",
+              "description_1": "Description",
+              "article_id": "Article",
+              "production_order_status_id": "Status",
+              "planning_date": "Planning Date",
+              "total_hours_pre_calculation": "Hours (VC)",
+              "cost_total_pre_calculation": "Cost (VC)"
+            },
+            "excludeByName": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "type": "row",
+      "title": "Purchasing",
+      "gridPos": {
+        "x": 0,
+        "y": 50,
+        "w": 24,
+        "h": 1
+      },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 20,
+      "type": "stat",
+      "title": "Open Purchase Orders",
+      "description": "Purchase order headers not yet closed, with an order date in the current time range.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 51,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "count"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "PurchaseOrderHeaders",
+            "entityType": "FledgeDev.Models.Entities.PurchaseOrderHeader"
+          },
+          "refId": "A",
+          "properties": [
+            {
+              "name": "purchase_order_header_id",
+              "type": "Edm.String"
+            }
+          ],
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "closed",
+                "type": "Edm.Boolean"
+              },
+              "operator": "eq",
+              "value": "false"
+            },
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "type": "stat",
+      "title": "Purchase Orders (Period)",
+      "description": "Purchase order headers with an order date in the current time range.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 51,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "count"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "PurchaseOrderHeaders",
+            "entityType": "FledgeDev.Models.Entities.PurchaseOrderHeader"
+          },
+          "refId": "A",
+          "properties": [
+            {
+              "name": "purchase_order_header_id",
+              "type": "Edm.String"
+            }
+          ],
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "type": "stat",
+      "title": "Purchase Value (Period)",
+      "description": "Sum of purchase order line value (order_price) for lines with an order date in the current time range.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 51,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyEUR"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "PurchaseOrderLines",
+            "entityType": "FledgeDev.Models.Entities.PurchaseOrderLine"
+          },
+          "refId": "A",
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ],
+          "groupBy": [],
+          "aggregates": [
+            {
+              "property": {
+                "name": "order_price",
+                "type": "Edm.Decimal"
+              },
+              "function": "sum",
+              "alias": "total_value"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "type": "stat",
+      "title": "Suppliers Used (Period)",
+      "description": "Distinct creditors on purchase order lines with an order date in the current time range.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 18,
+        "y": 51,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "distinctCount"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "PurchaseOrderLines",
+            "entityType": "FledgeDev.Models.Entities.PurchaseOrderLine"
+          },
+          "refId": "A",
+          "properties": [
+            {
+              "name": "creditor_id",
+              "type": "Edm.Int32"
+            }
+          ],
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "type": "timeseries",
+      "title": "Purchase Order Value Over Time",
+      "description": "Purchase order line value summed per order date (server-side $apply).",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 55,
+        "w": 12,
+        "h": 9
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "gradientMode": "opacity",
+            "pointSize": 5,
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "mode": "none",
+              "group": "A"
+            },
+            "axisPlacement": "auto",
+            "axisLabel": "",
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "unit": "currencyEUR",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "PurchaseOrderLines",
+            "entityType": "FledgeDev.Models.Entities.PurchaseOrderLine"
+          },
+          "refId": "Value",
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ],
+          "groupBy": [
+            {
+              "name": "order_date",
+              "type": "Edm.Date"
+            }
+          ],
+          "aggregates": [
+            {
+              "property": {
+                "name": "order_price",
+                "type": "Edm.Decimal"
+              },
+              "function": "sum",
+              "alias": "total_value"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "type": "piechart",
+      "title": "Purchase Value by Supplier (Top 10)",
+      "description": "Purchase order line value grouped by supplier (creditor_id), for lines with an order date in the current time range (server-side $apply, top 10 client-side).",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 55,
+        "w": 12,
+        "h": 9
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "unit": "currencyEUR"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "pieType": "donut",
+        "displayLabels": [
+          "percent"
+        ],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "PurchaseOrderLines",
+            "entityType": "FledgeDev.Models.Entities.PurchaseOrderLine"
+          },
+          "refId": "BySupplier",
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ],
+          "groupBy": [
+            {
+              "name": "creditor_id",
+              "type": "Edm.Int32"
+            }
+          ],
+          "aggregates": [
+            {
+              "property": {
+                "name": "order_price",
+                "type": "Edm.Decimal"
+              },
+              "function": "sum",
+              "alias": "total_value"
+            }
+          ]
+        }
+      ],
+      "transformations": [
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "field": "total_value",
+                "desc": true
+              }
+            ]
+          }
+        },
+        {
+          "id": "limit",
+          "options": {
+            "limitField": 10
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "indexByName": {},
+            "renameByName": {
+              "creditor_id": "Supplier (Creditor ID)",
+              "total_value": "Value"
+            },
+            "excludeByName": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "type": "table",
+      "title": "Open Purchase Orders \u2013 Upcoming Deliveries",
+      "description": "Purchase order headers not yet closed, with an order date in the current time range, sorted by delivery date.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 64,
+        "w": 24,
+        "h": 9
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Order Date"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Delivery Date"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              },
+              {
+                "id": "custom.width",
+                "value": 160
+              }
+            ]
+          }
+        ]
+      },
+      "pluginVersion": "13.2.1",
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "reducer": [
+            "sum"
+          ],
+          "countRows": false,
+          "fields": ""
+        },
+        "sortBy": [
+          {
+            "displayName": "Delivery Date",
+            "desc": false
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "PurchaseOrderHeaders",
+            "entityType": "FledgeDev.Models.Entities.PurchaseOrderHeader"
+          },
+          "refId": "Open",
+          "properties": [
+            {
+              "name": "description_1",
+              "type": "Edm.String"
+            },
+            {
+              "name": "creditor_id",
+              "type": "Edm.Int32"
+            },
+            {
+              "name": "delivery_date",
+              "type": "Edm.Date"
+            },
+            {
+              "name": "closed",
+              "type": "Edm.Boolean"
+            }
+          ],
+          "timeProperty": {
+            "name": "order_date",
+            "type": "Edm.Date"
+          },
+          "filterConditions": [
+            {
+              "property": {
+                "name": "closed",
+                "type": "Edm.Boolean"
+              },
+              "operator": "eq",
+              "value": "false"
+            },
+            {
+              "property": {
+                "name": "administration_id",
+                "type": "Edm.Int32"
+              },
+              "operator": "eq",
+              "value": "$administration"
+            }
+          ]
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "indexByName": {
+              "purchase_order_header_id": 0,
+              "order_date": 1,
+              "description_1": 2,
+              "creditor_id": 3,
+              "delivery_date": 4,
+              "closed": 5
+            },
+            "renameByName": {
+              "purchase_order_header_id": "Order",
+              "order_date": "Order Date",
+              "description_1": "Description",
+              "creditor_id": "Supplier (Creditor ID)",
+              "delivery_date": "Delivery Date",
+              "closed": "Closed"
+            },
+            "excludeByName": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "type": "row",
+      "title": "Relations (CRM)",
+      "gridPos": {
+        "x": 0,
+        "y": 73,
+        "w": 24,
+        "h": 1
+      },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 28,
+      "type": "stat",
+      "title": "Total Relations",
+      "description": "Total relations of any kind, not scoped to the dashboard time range or Administration (Relations are not administration-scoped).",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 74,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "count"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "Relations",
+            "entityType": "FledgeDev.Models.Entities.Relation"
+          },
+          "refId": "A",
+          "properties": [
+            {
+              "name": "relation_id",
+              "type": "Edm.Int32"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "type": "stat",
+      "title": "Customers (Debtors)",
+      "description": "Relations flagged as a debtor (customer).",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 74,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "count"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "Relations",
+            "entityType": "FledgeDev.Models.Entities.Relation"
+          },
+          "refId": "A",
+          "properties": [
+            {
+              "name": "relation_id",
+              "type": "Edm.Int32"
+            }
+          ],
+          "filterConditions": [
+            {
+              "property": {
+                "name": "is_debtor",
+                "type": "Edm.Boolean"
+              },
+              "operator": "eq",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "type": "stat",
+      "title": "Suppliers (Creditors)",
+      "description": "Relations flagged as a creditor (supplier).",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 74,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "count"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "Relations",
+            "entityType": "FledgeDev.Models.Entities.Relation"
+          },
+          "refId": "A",
+          "properties": [
+            {
+              "name": "relation_id",
+              "type": "Edm.Int32"
+            }
+          ],
+          "filterConditions": [
+            {
+              "property": {
+                "name": "is_creditor",
+                "type": "Edm.Boolean"
+              },
+              "operator": "eq",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "type": "stat",
+      "title": "New Relations (Period)",
+      "description": "Relations whose first-contact date falls in the current dashboard time range.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 18,
+        "y": 74,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "count"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "Relations",
+            "entityType": "FledgeDev.Models.Entities.Relation"
+          },
+          "refId": "A",
+          "properties": [
+            {
+              "name": "relation_id",
+              "type": "Edm.Int32"
+            }
+          ],
+          "timeProperty": {
+            "name": "date_first_contact",
+            "type": "Edm.Date"
+          }
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "type": "timeseries",
+      "title": "New Relations Over Time (First Contact)",
+      "description": "New relations grouped by first-contact date, computed client-side via a Grafana group-by transformation (rather than OData $apply) to show that technique too.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 78,
+        "w": 12,
+        "h": 9
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "bars",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 80,
+            "gradientMode": "opacity",
+            "pointSize": 5,
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "mode": "none",
+              "group": "A"
+            },
+            "axisPlacement": "auto",
+            "axisLabel": "",
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "unit": "short",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "Relations",
+            "entityType": "FledgeDev.Models.Entities.Relation"
+          },
+          "refId": "NewRelations",
+          "properties": [
+            {
+              "name": "relation_id",
+              "type": "Edm.Int32"
+            }
+          ],
+          "timeProperty": {
+            "name": "date_first_contact",
+            "type": "Edm.Date"
+          }
+        }
+      ],
+      "transformations": [
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "date_first_contact": {
+                "operation": "groupby"
+              },
+              "relation_id": {
+                "operation": "aggregate",
+                "aggregations": [
+                  "count"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "indexByName": {},
+            "renameByName": {
+              "date_first_contact": "First Contact Date",
+              "relation_id (count)": "New Relations"
+            },
+            "excludeByName": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "type": "bargauge",
+      "title": "Relations by Role",
+      "description": "Count of relations flagged with each role. Roles are independent flags, not mutually exclusive - a relation can be both a debtor and a creditor, for example - so this is six separate counts (one query per role) rather than a single group-by/pie breakdown.",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 78,
+        "w": 12,
+        "h": 9
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short",
+          "min": 0
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "Debtors"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Debtors"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "Creditors"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Creditors"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "Employees"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Employees"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "Dealers"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Dealers"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "Manufacturers"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Manufacturers"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "Wholesalers"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Wholesalers"
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "gradient",
+        "reduceOptions": {
+          "calcs": [
+            "count"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "13.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "Relations",
+            "entityType": "FledgeDev.Models.Entities.Relation"
+          },
+          "refId": "Debtors",
+          "properties": [
+            {
+              "name": "relation_id",
+              "type": "Edm.Int32"
+            }
+          ],
+          "filterConditions": [
+            {
+              "property": {
+                "name": "is_debtor",
+                "type": "Edm.Boolean"
+              },
+              "operator": "eq",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "Relations",
+            "entityType": "FledgeDev.Models.Entities.Relation"
+          },
+          "refId": "Creditors",
+          "properties": [
+            {
+              "name": "relation_id",
+              "type": "Edm.Int32"
+            }
+          ],
+          "filterConditions": [
+            {
+              "property": {
+                "name": "is_creditor",
+                "type": "Edm.Boolean"
+              },
+              "operator": "eq",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "Relations",
+            "entityType": "FledgeDev.Models.Entities.Relation"
+          },
+          "refId": "Employees",
+          "properties": [
+            {
+              "name": "relation_id",
+              "type": "Edm.Int32"
+            }
+          ],
+          "filterConditions": [
+            {
+              "property": {
+                "name": "is_employee",
+                "type": "Edm.Boolean"
+              },
+              "operator": "eq",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "Relations",
+            "entityType": "FledgeDev.Models.Entities.Relation"
+          },
+          "refId": "Dealers",
+          "properties": [
+            {
+              "name": "relation_id",
+              "type": "Edm.Int32"
+            }
+          ],
+          "filterConditions": [
+            {
+              "property": {
+                "name": "is_dealer",
+                "type": "Edm.Boolean"
+              },
+              "operator": "eq",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "Relations",
+            "entityType": "FledgeDev.Models.Entities.Relation"
+          },
+          "refId": "Manufacturers",
+          "properties": [
+            {
+              "name": "relation_id",
+              "type": "Edm.Int32"
+            }
+          ],
+          "filterConditions": [
+            {
+              "property": {
+                "name": "is_manufacturer",
+                "type": "Edm.Boolean"
+              },
+              "operator": "eq",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "Relations",
+            "entityType": "FledgeDev.Models.Entities.Relation"
+          },
+          "refId": "Wholesalers",
+          "properties": [
+            {
+              "name": "relation_id",
+              "type": "Edm.Int32"
+            }
+          ],
+          "filterConditions": [
+            {
+              "property": {
+                "name": "is_wholesaler",
+                "type": "Edm.Boolean"
+              },
+              "operator": "eq",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "type": "table",
+      "title": "Recent Relations",
+      "description": "Relations sorted by first-contact date, newest first. Not scoped by Administration (Relations are not administration-scoped).",
+      "datasource": {
+        "type": "fledge-odata-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 87,
+        "w": 24,
+        "h": 9
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "First Contact"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          }
+        ]
+      },
+      "pluginVersion": "13.2.1",
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "reducer": [
+            "sum"
+          ],
+          "countRows": false,
+          "fields": ""
+        },
+        "sortBy": [
+          {
+            "displayName": "First Contact",
+            "desc": true
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "fledge-odata-datasource",
+            "uid": "${datasource}"
+          },
+          "entitySet": {
+            "name": "Relations",
+            "entityType": "FledgeDev.Models.Entities.Relation"
+          },
+          "refId": "Relations",
+          "properties": [
+            {
+              "name": "company_name_1",
+              "type": "Edm.String"
+            },
+            {
+              "name": "city",
+              "type": "Edm.String"
+            },
+            {
+              "name": "is_debtor",
+              "type": "Edm.Boolean"
+            },
+            {
+              "name": "is_creditor",
+              "type": "Edm.Boolean"
+            },
+            {
+              "name": "is_active",
+              "type": "Edm.Int32"
+            },
+            {
+              "name": "telephone",
+              "type": "Edm.String"
+            },
+            {
+              "name": "email",
+              "type": "Edm.String"
+            }
+          ],
+          "timeProperty": {
+            "name": "date_first_contact",
+            "type": "Edm.Date"
+          }
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "indexByName": {
+              "relation_id": 0,
+              "company_name_1": 1,
+              "city": 2,
+              "date_first_contact": 3,
+              "is_debtor": 4,
+              "is_creditor": 5,
+              "is_active": 6,
+              "telephone": 7,
+              "email": 8
+            },
+            "renameByName": {
+              "relation_id": "Relation",
+              "company_name_1": "Company",
+              "city": "City",
+              "date_first_contact": "First Contact",
+              "is_debtor": "Debtor",
+              "is_creditor": "Creditor",
+              "is_active": "Active",
+              "telephone": "Telephone",
+              "email": "Email"
+            },
+            "excludeByName": {}
+          }
+        }
+      ]
+    }
+  ]
+}
