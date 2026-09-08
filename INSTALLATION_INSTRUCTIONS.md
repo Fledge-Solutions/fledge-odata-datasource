@@ -1,7 +1,7 @@
 # Fledge OData Datasource Plugin - Installation Instructions
 
 ## Prerequisites
-- Grafana version 10.4.0 or higher
+- Grafana version 13.2.1 or higher
 - Access to the Grafana server (SSH or local access)
 - Administrator privileges on Grafana
 
@@ -181,5 +181,5 @@ For questions or issues with the plugin:
 ## Version Information
 
 - **Plugin Version**: 1.4.0
-- **Grafana Compatibility**: ≥10.4.0
+- **Grafana Compatibility**: ≥13.2.1
 - **OData Version**: V4
