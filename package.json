@@ -50,8 +50,8 @@
     "@testing-library/react": "^16.3.2",
     "@types/jest": "^30.0.0",
     "@types/node": "^25.5.2",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.7",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
     "axe-core": "^4.11.2",
@@ -95,8 +95,8 @@
     "@grafana/runtime": "^13.2.1",
     "@grafana/schema": "^13.2.1",
     "@grafana/ui": "^13.2.1",
-    "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
   },
   "packageManager": "npm@11.16.0"
 }
