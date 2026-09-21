@@ -168,6 +168,7 @@ func (client *ODataClientImpl) Get(ctx context.Context, entitySet string, proper
 		return nil, err
 	}
 	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Prefer", "odata.maxpagesize=1000")
 	return client.doRequest(req)
 }
 
@@ -188,6 +189,7 @@ func (client *ODataClientImpl) GetAggregated(ctx context.Context, entitySet stri
 		return nil, err
 	}
 	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Prefer", "odata.maxpagesize=1000")
 	return client.doRequest(req)
 }
 
@@ -399,12 +401,12 @@ func mapFilter(filterConditions []filterCondition) string {
 			continue
 		}
 
-		// String and time-like types require single-quoted literals.
-		// Edm.Date uses an unquoted date literal in standard OData.
-		needsQuotes := element.Property.Type == odata.EdmString ||
-			element.Property.Type == odata.EdmDateTimeOffset ||
-			element.Property.Type == odata.EdmDateTime ||
-			element.Property.Type == odata.EdmTime
+		// Only Edm.String requires a single-quoted literal in OData v4.
+		// Edm.DateTimeOffset and Edm.Date use unquoted literals
+		// (e.g. `field ge 2024-01-01T00:00:00Z`); quoting them makes the
+		// server parse the value as Edm.String, causing an
+		// "incompatible types" error on comparison operators.
+		needsQuotes := element.Property.Type == odata.EdmString
 		if needsQuotes {
 			parts = append(parts, fmt.Sprintf("%s %s '%s'", element.Property.Name, element.Operator, value))
 		} else if value == "" {

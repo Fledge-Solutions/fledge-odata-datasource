@@ -25,7 +25,7 @@ func TestMapFilter(t *testing.T) {
 				withFilterCondition(timeProp, "ge", aOneDayTimeRange().From.Format(time.RFC3339)),
 				withFilterCondition(timeProp, "le", aOneDayTimeRange().To.Format(time.RFC3339)),
 				int32Eq5),
-			expected: "time ge '2022-04-21T12:30:50Z' and time le '2022-04-21T12:30:50Z' and int32 eq 5",
+			expected: "time ge 2022-04-21T12:30:50Z and time le 2022-04-21T12:30:50Z and int32 eq 5",
 		},
 		{
 			name: "Time filter and int and string filter",
@@ -34,7 +34,7 @@ func TestMapFilter(t *testing.T) {
 				withFilterCondition(timeProp, "le", aOneDayTimeRange().To.Format(time.RFC3339)),
 				int32Eq5,
 				withFilterCondition(stringProp, "eq", "Hello")),
-			expected: "time ge '2022-04-21T12:30:50Z' and time le '2022-04-21T12:30:50Z' and int32 eq 5 and string eq 'Hello'",
+			expected: "time ge 2022-04-21T12:30:50Z and time le 2022-04-21T12:30:50Z and int32 eq 5 and string eq 'Hello'",
 		},
 		{
 			name: "Time filter and string filter",
@@ -42,7 +42,7 @@ func TestMapFilter(t *testing.T) {
 				withFilterCondition(timeProp, "ge", aOneDayTimeRange().From.Format(time.RFC3339)),
 				withFilterCondition(timeProp, "le", aOneDayTimeRange().To.Format(time.RFC3339)),
 				withFilterCondition(stringProp, "eq", "")),
-			expected: "time ge '2022-04-21T12:30:50Z' and time le '2022-04-21T12:30:50Z' and string eq ''",
+			expected: "time ge 2022-04-21T12:30:50Z and time le 2022-04-21T12:30:50Z and string eq ''",
 		},
 		{
 			name:             "String filter only",
@@ -50,13 +50,13 @@ func TestMapFilter(t *testing.T) {
 			expected:         "string eq ''",
 		},
 		{
-			name: "DateTime filter - single quoted (e.g. SalesOrderLineStatuses.creation_date_time)",
+			name: "DateTimeOffset filter - unquoted (e.g. SalesOrderLineStatuses.creation_date_time)",
 			filterConditions: someFilterConditions(
 				withFilterCondition(func(p *property) {
 					p.Name = "creation_date_time"
-					p.Type = odata.EdmDateTime
+					p.Type = odata.EdmDateTimeOffset
 				}, "ge", "2024-01-01T00:00:00Z")),
-			expected: "creation_date_time ge '2024-01-01T00:00:00Z'",
+			expected: "creation_date_time ge 2024-01-01T00:00:00Z",
 		},
 	}
 
@@ -133,13 +133,13 @@ func TestMapFilterNowSentinel(t *testing.T) {
 		assert.NoError(t, err, "expected a bare YYYY-MM-DD literal, got %q", result)
 	})
 
-	t.Run("Edm.DateTimeOffset resolves to a quoted RFC3339 literal", func(t *testing.T) {
+	t.Run("Edm.DateTimeOffset resolves to an unquoted RFC3339 literal", func(t *testing.T) {
 		filterConditions := someFilterConditions(
 			withFilterCondition(timeProp, "ge", nowValueSentinel))
 
 		result := mapFilter(filterConditions)
-		matched := regexp.MustCompile(`^time ge '\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z'$`).MatchString(result)
-		assert.True(t, matched, "expected a quoted RFC3339 literal, got %q", result)
+		matched := regexp.MustCompile(`^time ge \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$`).MatchString(result)
+		assert.True(t, matched, "expected an unquoted RFC3339 literal, got %q", result)
 	})
 }
 
@@ -164,7 +164,7 @@ func TestBuildQueryUrl(t *testing.T) {
 				withFilterCondition(timeProp, "ge", aOneDayTimeRange().From.Format(time.RFC3339)),
 				withFilterCondition(timeProp, "le", aOneDayTimeRange().To.Format(time.RFC3339)),
 				withFilterCondition(stringProp, "eq", "")),
-			expected: "http://localhost:5000/Temperatures?%24filter=time+ge+%272022-04-21T12%3A30%3A50Z%27+and+time+le+%272022-04-21T12%3A30%3A50Z%27+and+string+eq+%27%27&%24select=int32%2Ctime",
+			expected: "http://localhost:5000/Temperatures?%24filter=time+ge+2022-04-21T12%3A30%3A50Z+and+time+le+2022-04-21T12%3A30%3A50Z+and+string+eq+%27%27&%24select=int32%2Ctime",
 		},
 		{
 			name:       "Nested expand with select properties",

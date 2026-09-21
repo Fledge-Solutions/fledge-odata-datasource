@@ -331,6 +331,7 @@ func (ds *ODataSource) fetchNextLink(ctx context.Context, clientInstance ODataCl
 		return nil, fmt.Errorf("failed to create request for nextLink: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Prefer", "odata.maxpagesize=1000")
 
 	resp, err := clientImpl.doRequest(req)
 	if err != nil {

@@ -88,10 +88,10 @@ func TestMapFilterStandardScenarios(t *testing.T) {
 			expected: "administration_id eq 1",
 		},
 		{
-			name: "DateTimeOffset filter remains single quoted",
+			name: "DateTimeOffset filter uses unquoted literal",
 			filterConditions: someFilterConditions(
 				withFilterCondition(timeProp, "ge", "2024-01-01T00:00:00Z")),
-			expected: "time ge '2024-01-01T00:00:00Z'",
+			expected: "time ge 2024-01-01T00:00:00Z",
 		},
 		{
 			name: "Date filter uses unquoted date literal",
@@ -111,7 +111,7 @@ func TestMapFilterStandardScenarios(t *testing.T) {
 				}, "eq", "5"),
 				withFilterCondition(timeProp, "ge", aOneDayTimeRange().From.Format(time.RFC3339)),
 				withFilterCondition(timeProp, "le", aOneDayTimeRange().To.Format(time.RFC3339))),
-			expected: "administration_id eq 5 and time ge '2022-04-21T12:30:50Z' and time le '2022-04-21T12:30:50Z'",
+			expected: "administration_id eq 5 and time ge 2022-04-21T12:30:50Z and time le 2022-04-21T12:30:50Z",
 		},
 	}
 
